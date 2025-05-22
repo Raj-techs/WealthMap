@@ -57,26 +57,29 @@ const AuthPage = () => {
     </h2>
 
     {/* Toggle Buttons */}
-    <div className="flex justify-around py-6 bg-blue-100">
-      <button
-        onClick={() => setIsLogin(false)}
-        className={`flex items-center gap-2 text-lg font-bold transition ${
-          !isLogin ? "text-blue-700" : "text-gray-400"
-        }`}
-      >
-        <FaUserPlus />
-        Sign up
-      </button>
-      <button
-        onClick={() => setIsLogin(true)}
-        className={`flex items-center gap-2 text-lg font-bold transition ${
-          isLogin ? "text-blue-700" : "text-gray-400"
-        }`}
-      >
-        <FaSignInAlt />
-        Login
-      </button>
-    </div>
+    {/* Toggle Buttons */}
+<div className="flex justify-around py-6 bg-blue-100">
+  {role !== "admin" && ( // Only show Sign Up if not admin
+    <button
+      onClick={() => setIsLogin(false)}
+      className={`flex items-center gap-2 text-lg font-bold transition ${
+        !isLogin ? "text-blue-700" : "text-gray-400"
+      }`}
+    >
+      <FaUserPlus />
+      Sign up
+    </button>
+  )}
+  <button
+    onClick={() => setIsLogin(true)}
+    className={`flex items-center gap-2 text-lg font-bold transition ${
+      isLogin ? "text-blue-700" : "text-gray-400"
+    }`}
+  >
+    <FaSignInAlt />
+    Login
+  </button>
+</div>
 
     {/* Form Section */}
     <form onSubmit={handleSubmit} className="px-10 py-8 space-y-6">
