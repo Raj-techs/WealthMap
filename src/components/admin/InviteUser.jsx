@@ -1,57 +1,72 @@
-import React, { useState } from "react";
-import { sendInvitationEmail } from "../../firebase/inviteService";
-import { logActivity } from "../../firebase/logActivity";
+import React, { useState } from 'react';
+import { sendInvitationEmail } from '../../firebase/inviteService';
 
-const InviteUser = () => {
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("user");
-  const [status, setStatus] = useState("");
+const InviteUser = ({ onClose }) => {
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('user'); // Default role
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleInvite = async (e) => {
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
     try {
       await sendInvitationEmail(email, role);
-      setStatus("✅ Invitation email sent successfully.");
-      setEmail("");
+      setSuccess('Invitation sent successfully!');
+      setEmail(''); // Clear form
+      setRole('user');
     } catch (error) {
-      console.error("Invitation error:", error);
-      setStatus("❌ Failed to send invitation.");
+      console.error('Invitation error:', error);
+      setError(error.message || 'Failed to send invitation');
     }
-    await logActivity({
-      userId: admin.uid, // Replace with actual admin ID
-      role: "admin",
-      action: `Invited ${email} as ${role}`,
-      actionType: "invited",
-    });
   };
 
   return (
-    <div className="max-w-md bg-white p-6 rounded shadow">
-      <h2 className="text-xl font-bold mb-4">Invite Employee</h2>
-      <form onSubmit={handleInvite} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Employee Email"
-          className="w-full border p-2 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <select
-          className="w-full border p-2 rounded"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button
-          type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-        >
-          Send Invite
-        </button>
-        {status && <p className="text-sm mt-2">{status}</p>}
+    <div className="p-6 bg-white rounded shadow-md">
+      <h3 className="text-xl font-bold mb-4">Invite Employee</h3>
+      {success && <p className="text-green-600 mb-4">{success}</p>}
+      {error && <p className="text-red-600 mb-4">{error}</p>}
+      <form onSubmit={handleInvite}>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email"
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Role</label>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div className="flex justify-end space-x-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-gray-600 border rounded hover:bg-gray-100"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Send Invite
+          </button>
+        </div>
       </form>
     </div>
   );

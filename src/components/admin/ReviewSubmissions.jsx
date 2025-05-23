@@ -132,97 +132,101 @@ const ReviewSubmissions = () => {
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {submissions.map((item) => (
             <div
-              key={item.id}
-              className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border border-gray-100 flex flex-col overflow-hidden relative group hover:ring-2 hover:ring-indigo-300"
-            >
-              {/* Ribbon for price */}
-              <div className="absolute top-0 right-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-1 rounded-bl-2xl font-bold shadow-md z-10 text-sm flex items-center gap-1"
-                style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.25)" }}>
-                <svg className="w-4 h-4 text-white drop-shadow" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 10v4m8-8h-4m-4 0H4" />
-                </svg>
-                ${item.price}
+  key={item.id}
+  className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border border-gray-100 flex flex-col overflow-hidden relative group hover:ring-2 hover:ring-indigo-300"
+>
+  {/* Ribbon for price - Smaller on mobile */}
+  <div className="absolute top-0 right-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-3 py-1 rounded-bl-2xl font-bold shadow-md z-10 text-xs sm:text-sm flex items-center gap-1"
+    style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.25)" }}>
+    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white drop-shadow" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 10v4m8-8h-4m-4 0H4" />
+    </svg>
+    ${item.price}
+  </div>
+
+  {/* Card Content */}
+  <div className="p-3 sm:p-4 flex-1 flex flex-col">
+    {/* Title + ID (Stacked on mobile) */}
+    <div className="mb-2 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+      <span className="font-semibold text-base sm:text-lg text-indigo-700 truncate" style={{ textShadow: "1px 1px 4px #e0e7ff" }}>
+        {item.title}
+      </span>
+      <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded self-start sm:self-center">
+        #{item.id.slice(-4)}
+      </span>
+    </div>
+
+    {/* Address (Icon + Text) */}
+    <div className="mb-2 text-gray-600 text-xs sm:text-sm flex items-center gap-1">
+      <svg className="w-3 h-3 sm:w-4 sm:h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 12.414a4 4 0 10-5.657 5.657l4.243 4.243a8 8 0 1011.314-11.314l-4.243 4.243z" />
+      </svg>
+      <span className="truncate">{item.address}</span>
+    </div>
+
+    {/* Submitted By (Hidden on smallest screens) */}
+    <div className="mb-2 text-xs text-gray-500 flex items-center gap-1">
+      <svg className="w-3 h-3 sm:w-4 sm:h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.847.607 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <span className="hidden xs:inline">Submitted by: </span>
+      <span className="font-medium text-indigo-600">{usernames[item.submittedBy] || "guest"}</span>
+    </div>
+
+    {/* Map Container (Fixed Aspect Ratio) */}
+    <div className="mb-3 rounded-xl overflow-hidden border border-indigo-100 shadow-sm aspect-video"> {/* aspect-video for 16:9 ratio */}
+      {item.coordinates?.lat && item.coordinates?.lng ? (
+        <MapContainer
+          center={[item.coordinates.lat, item.coordinates.lng]}
+          zoom={13}
+          style={{ height: "100%", width: "100%" }}
+          scrollWheelZoom={false} // Disable on mobile
+          dragging={!navigator.userAgent.match(/Mobile/)} // Disable drag on mobile
+          doubleClickZoom={false}
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <Marker position={[item.coordinates.lat, item.coordinates.lng]}>
+            <Popup className="text-xs"> {/* Smaller popup text */}
+              <div>
+                <div><strong>City:</strong> {item.city}</div>
+                <div><strong>Net Worth:</strong> {item.ownernetworth}</div>
               </div>
-              {/* Card Content */}
-              <div className="p-4 flex-1 flex flex-col">
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="font-semibold text-lg text-indigo-700 truncate" style={{ textShadow: "1px 1px 4px #e0e7ff" }}>
-                    {item.title}
-                  </span>
-                  <span className="ml-auto text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded">
-                    #{item.id.slice(-4)}
-                  </span>
-                </div>
-                <div className="mb-2 text-gray-600 text-sm flex items-center gap-1">
-                  <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 12.414a4 4 0 10-5.657 5.657l4.243 4.243a8 8 0 1011.314-11.314l-4.243 4.243z" />
-                  </svg>
-                  {item.address}
-                </div>
-                <div className="mb-2 text-xs text-gray-500 flex items-center gap-1">
-                  <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.847.607 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  Submitted by:{" "}
-                  <span className="font-medium text-indigo-600 ml-1">
-                    {usernames[item.submittedBy] || "guest"}
-                  </span>
-                </div>
-                <div className="h-40 mb-3 rounded-xl overflow-hidden border border-indigo-100 shadow-sm">
-                  {item.coordinates?.lat && item.coordinates?.lng ? (
-                    <MapContainer
-                      center={[item.coordinates.lat, item.coordinates.lng]}
-                      zoom={13}
-                      style={{ height: "100%", width: "100%" }}
-                      scrollWheelZoom={true}
-                      dragging={true}
-                      doubleClickZoom={true}
-                      zoomControl={true}
-                    >
-                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                      <Marker position={[item.coordinates.lat, item.coordinates.lng]}>
-                        <Popup>
-                          <div>
-                            <div><strong>City:</strong> {item.city}</div>
-                            <div><strong>OwnerNetWorth:</strong> {item.ownernetworth}</div>
-                            <div><strong>Size:</strong> {item.size}sqft</div>
-                            <div><strong>Type:</strong> {item.type}</div>
-                          </div>
-                        </Popup>
-                      </Marker>
-                    </MapContainer>
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-red-500 text-sm">
-                      No coordinates available for map preview
-                    </div>
-                  )}
-                </div>
-                <div className="flex justify-between mt-auto space-x-2">
-                  <button
-                    onClick={() => handleApprove(item)}
-                    className="flex-1 bg-gradient-to-r from-green-500 to-green-700 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-green-600 hover:to-green-800 transition flex items-center justify-center gap-2"
-                    style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.15)" }}
-                  >
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => handleReject(item.id)}
-                    className="flex-1 bg-gradient-to-r from-red-500 to-red-700 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-red-600 hover:to-red-800 transition flex items-center justify-center gap-2"
-                    style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.15)" }}
-                  >
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Reject
-                  </button>
-                </div>
-              </div>
-              {/* Subtle hover effect */}
-              <div className="absolute inset-0 bg-indigo-50 opacity-0 group-hover:opacity-10 transition pointer-events-none" />
-            </div>
+            </Popup>
+          </Marker>
+        </MapContainer>
+      ) : (
+        <div className="flex items-center justify-center h-full text-red-500 text-xs sm:text-sm">
+          No coordinates available
+        </div>
+      )}
+    </div>
+
+    {/* Buttons (Stack on mobile) */}
+    <div className="flex flex-col sm:flex-row justify-between mt-auto gap-2">
+      <button
+        onClick={() => handleApprove(item)}
+        className="flex-1 bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold shadow hover:from-green-600 hover:to-green-800 transition flex items-center justify-center gap-1 sm:gap-2 text-sm sm:text-base"
+      >
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        Approve
+      </button>
+      <button
+        onClick={() => handleReject(item.id)}
+        className="flex-1 bg-gradient-to-r from-red-500 to-red-700 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold shadow hover:from-red-600 hover:to-red-800 transition flex items-center justify-center gap-1 sm:gap-2 text-sm sm:text-base"
+      >
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Reject
+      </button>
+    </div>
+  </div>
+
+  {/* Subtle hover effect (Desktop only) */}
+  <div className="hidden sm:block absolute inset-0 bg-indigo-50 opacity-0 group-hover:opacity-10 transition pointer-events-none" />
+</div>
           ))}
         </div>
       </div>

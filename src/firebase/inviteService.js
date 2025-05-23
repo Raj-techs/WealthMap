@@ -1,19 +1,36 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "./config";
 
-// Simulated invitation: store invite in Firestore
 export const sendInvitationEmail = async (email, role) => {
-  const response = await fetch("http://localhost:5000/send-invite", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, role }),
-  });
+  try {
+    if (!email || !role) {
+      throw new Error("Email and role are required");
+    }
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || "Failed to send invitation");
+    const response = await fetch("http://localhost:5000/send-invite", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, role }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to send invitation");
+    }
+
+    const result = await response.json();
+
+    await addDoc(collection(db, "invitations"), {
+      email,
+      role,
+      status: "pending",
+      createdAt: serverTimestamp(),
+    });
+
+    console.log("Invitation sent and stored successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error in sendInvitationEmail:", error.message);
+    throw error;
   }
-
-  return await response.json();
 };
-
