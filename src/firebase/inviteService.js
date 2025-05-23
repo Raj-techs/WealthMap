@@ -7,7 +7,7 @@ export const sendInvitationEmail = async (email, role) => {
       throw new Error("Email and role are required");
     }
 
-    const response = await fetch("http://localhost:5000/send-invite", {
+    const response = await fetch("https://wealthmap-backend-czt7.onrender.com/send-invite", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, role }),
