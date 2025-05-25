@@ -86,7 +86,7 @@ const ReviewSubmissions = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 to-white relative">
       {/* Sidebar for desktop */}
-      <div className="hidden md:block w-64">
+      <div className="hidden md:block w-1">
        
       </div>
       {/* Sidebar for mobile */}
@@ -120,7 +120,7 @@ const ReviewSubmissions = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 p-2 sm:p-2 md:p-3 transition-all duration-300">
+      <div className="flex-1 p-2 sm:p-4 md:p-8 transition-all duration-300">
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-indigo-800 text-center drop-shadow-sm">
           Review Property Submissions
         </h2>
@@ -129,11 +129,11 @@ const ReviewSubmissions = () => {
             <p className="text-gray-500 text-lg">No pending submissions.</p>
           </div>
         )}
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-[160%]">
+        <div className="grid gap-6 grid-cols-1 w-[100%] sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 overflow-hidden">
           {submissions.map((item) => (
             <div
   key={item.id}
-  className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border border-gray-100 flex flex-col overflow-hidden relative group hover:ring-2 hover:ring-indigo-300"
+  className="bg-white  rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border border-gray-100 flex flex-col overflow-hidden relative group hover:ring-2 hover:ring-indigo-300"
 >
   {/* Ribbon for price - Smaller on mobile */}
   <div className="absolute top-0 right-0 bg-gradient-to-r from-green-400 to-green-600 text-white px-3 py-1 rounded-bl-2xl font-bold shadow-md z-10 text-xs sm:text-sm flex items-center gap-1"
@@ -145,7 +145,7 @@ const ReviewSubmissions = () => {
   </div>
 
   {/* Card Content */}
-  <div className="p-3 sm:p-4   flex-1 flex flex-col">
+  <div className="p-3 sm:p-4  flex-1 flex flex-col">
     {/* Title + ID (Stacked on mobile) */}
     <div className="mb-2 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
       <span className="font-semibold text-base sm:text-lg text-indigo-700 truncate" style={{ textShadow: "1px 1px 4px #e0e7ff" }}>
@@ -210,7 +210,7 @@ const ReviewSubmissions = () => {
         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
         </svg>
-        Approve
+        Accept
       </button>
       <button
         onClick={() => handleReject(item.id)}
@@ -223,7 +223,6 @@ const ReviewSubmissions = () => {
       </button>
     </div>
   </div>
-
 
   {/* Subtle hover effect (Desktop only) */}
   <div className="hidden sm:block absolute inset-0 bg-indigo-50 opacity-0 group-hover:opacity-10 transition pointer-events-none" />
