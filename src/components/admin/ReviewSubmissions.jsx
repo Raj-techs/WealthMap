@@ -120,7 +120,7 @@ const ReviewSubmissions = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 p-2 sm:p-4 md:p-8 transition-all duration-300">
+      <div className="flex-1 p-2 sm:p-2 md:p-3 transition-all duration-300">
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-indigo-800 text-center drop-shadow-sm">
           Review Property Submissions
         </h2>
@@ -129,7 +129,7 @@ const ReviewSubmissions = () => {
             <p className="text-gray-500 text-lg">No pending submissions.</p>
           </div>
         )}
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-[160%]">
           {submissions.map((item) => (
             <div
   key={item.id}
@@ -145,7 +145,7 @@ const ReviewSubmissions = () => {
   </div>
 
   {/* Card Content */}
-  <div className="p-3 sm:p-4 flex-1 flex flex-col">
+  <div className="p-3 sm:p-4   flex-1 flex flex-col">
     {/* Title + ID (Stacked on mobile) */}
     <div className="mb-2 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
       <span className="font-semibold text-base sm:text-lg text-indigo-700 truncate" style={{ textShadow: "1px 1px 4px #e0e7ff" }}>
@@ -202,7 +202,7 @@ const ReviewSubmissions = () => {
     </div>
 
     {/* Buttons (Stack on mobile) */}
-    <div className="flex flex-col sm:flex-row justify-between mt-auto gap-2">
+    <div className="flex flex-row  justify-between mt-auto gap-2">
       <button
         onClick={() => handleApprove(item)}
         className="flex-1 bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold shadow hover:from-green-600 hover:to-green-800 transition flex items-center justify-center gap-1 sm:gap-2 text-sm sm:text-base"
@@ -223,6 +223,7 @@ const ReviewSubmissions = () => {
       </button>
     </div>
   </div>
+
 
   {/* Subtle hover effect (Desktop only) */}
   <div className="hidden sm:block absolute inset-0 bg-indigo-50 opacity-0 group-hover:opacity-10 transition pointer-events-none" />
